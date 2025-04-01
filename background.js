@@ -10,45 +10,26 @@ chrome.commands.onCommand.addListener((command) => {
         
         const currentTab = tabs[0];
         
-        // Instead of trying to use clipboard in background script,
-        // inject a content script to handle the copy operation
-        chrome.scripting.executeScript({
-          target: { tabId: currentTab.id },
-          function: (tabTitle, tabUrl) => {
-            // Try to get H1 first
-            let title = tabTitle;
-            try {
-              const h1Elements = document.getElementsByTagName('h1');
-              if (h1Elements.length > 0) {
-                title = h1Elements[0].textContent.trim();
-              }
-            } catch (e) {
-              console.error("Error getting H1:", e);
-            }
-            
-            // Format options
-            const linkText = `${title} (${tabUrl})`;
-            const linkHtml = `<a href="${tabUrl}">${title}</a>`;
-            
-            // Create a temporary element for copying
-            const textArea = document.createElement("textarea");
-            textArea.value = linkText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            
-            // Copy command
-            const success = document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
-            return { success, title, url: tabUrl };
+        // Create active tab
+        chrome.tabs.create(
+          { 
+            url: chrome.runtime.getURL("clipboard.html") + 
+                 `?title=${encodeURIComponent(currentTab.title)}&url=${encodeURIComponent(currentTab.url)}`,
+            active: false 
           },
-          args: [currentTab.title, currentTab.url]
-        }, (results) => {
-          // Show success badge after script injection completes
-          if (results && results[0] && results[0].result && results[0].result.success) {
-            showCopySuccess();
+          function(tab) {
+            // After a short delay to ensure the page is loaded
+            setTimeout(() => {
+              // Show the success notification
+              showCopySuccess();
+              
+              // Close the tab after giving it time to execute the copy
+              setTimeout(() => {
+                chrome.tabs.remove(tab.id);
+              }, 500);
+            }, 500);
           }
-        });
+        );
       });
     }
   });

@@ -41,5 +41,11 @@
     },
     "background": {
       "service_worker": "background.js"
-    }
+    },
+    "web_accessible_resources": [
+      {
+        "resources": ["clipboard.html", "clipboard.js"],
+        "matches": ["<all_urls>"]
+      }
+    ]
   }
