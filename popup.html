@@ -35,13 +35,25 @@
       text-align: center;
       display: none;
     }
+    .shortcut-info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <h3>URLとタイトルをコピー</h3>
-  <button id="copyButton">クリップボードにコピー</button>
-  <div id="success" class="success">コピーしました！</div>
-  <p><small>Googleドキュメントなどに直接ペースト可能</small></p>
+  <h3>Copy URL and Title</h3>
+  <button id="copyButton">Copy to Clipboard</button>
+  <div id="success" class="success">Copied Successfully!</div>
+  <p><small>Can be directly pasted into Google Docs and other applications</small></p>
+  <div class="shortcut-info">
+    <p>Keyboard shortcuts:</p>
+    <ul>
+      <li>Ctrl+Shift+L (Command+Shift+L on Mac): Open popup</li>
+      <li>Alt+L: Copy directly without opening popup</li>
+    </ul>
+  </div>
   <div class="result" id="result"></div>
   <script src="popup.js"></script>
 </body>

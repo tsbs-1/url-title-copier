@@ -1,26 +1,45 @@
 {
-  "manifest_version": 3,
-  "name": "URL・タイトルコピー",
-  "version": "1.0",
-  "description": "現在のページのURLとタイトル(h1)をハイパーリンク形式でコピーします",
-  "permissions": ["activeTab", "clipboardWrite", "scripting"],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
+    "manifest_version": 3,
+    "name": "URL & Title Copy",
+    "version": "1.0",
+    "description": "Copy the current page URL and title (h1) in hyperlink format",
+    "permissions": ["activeTab", "clipboardWrite", "scripting", "tabs"],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "images/icon16.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
+      }
+    },
+    "icons": {
       "16": "images/icon16.png",
       "48": "images/icon48.png",
       "128": "images/icon128.png"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "commands": {
+      "_execute_action": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+L",
+          "mac": "Command+Shift+L"
+        },
+        "description": "Copy URL and title"
+      },
+      "copy_url_title": {
+        "suggested_key": {
+          "default": "Alt+L",
+          "mac": "Alt+L"
+        },
+        "description": "Copy URL and title directly"
+      }
+    },
+    "background": {
+      "service_worker": "background.js"
     }
-  },
-  "icons": {
-    "16": "images/icon16.png",
-    "48": "images/icon48.png",
-    "128": "images/icon128.png"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ]
-}
+  }
